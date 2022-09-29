@@ -1,0 +1,53 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sympy import *
+
+muvals = []
+L1 = []
+
+ 
+for mu in np.arange(0.1, 0.6, 0.1):
+    muvals.append(mu)
+    x,mu = symbols("x mu")
+    s = -(1-mu)*(x+mu-1)**2 + mu*(x+mu)**2 + (x*(x+mu)**2)*(x+mu-1)**2 
+    s1 = s.expand()
+
+    coeff = []
+    rem = s1                    #making a "remainder variable" so that we can find the coefficient of each power in turn, at everystep, we will remove the power we have worked out and then move to the next one
+    eq = 0 
+    ### Finding all the cofficients of the powers of x ranging from 0 to 5
+    for n in range(1, 6):
+        coeff.append(s1.coeff(x**n))
+        rem = rem - s1.coeff(x**n) * x**n
+     
+    coeff.insert(0, simplify(rem))
+    coeff.reverse()             # reverse the order of the coefficient list
+    
+    #print(coeff)
+    coeff_vals = []
+                   
+    for c in coeff:             #for every value of the coeffient we have,
+        func = lambdify(mu, c, 'numpy')     # we now define a function that takes the range of mu we have given it and sticks in the coefficents 
+        coeff_vals.append(func(mu_val))     # we give our function the mu values we want to evaluate over and append the result to coeff_vals
+    
+    #print(coeff_vals)
+
+    answer = np.roots(coeff_vals)   #solving the 5th order polynomial 
+
+    #print(answer)
+    for a in answer:
+        if np.imag(a) == 0:
+            L1.append(np.real(a))
+
+print(L1)   
+#change file path
+np.save(r"C:\Users\mahim\Desktop\Physics 751\test.npy", L1) #writing the L1 array to a .npy file format
+
+
+
+## reading the .npy file for L1 back in and displaying the result
+
+
+#change file path
+data = np.load(r"C:\Users\mahim\Desktop\Physics 751\test.npy")
+print(data)
