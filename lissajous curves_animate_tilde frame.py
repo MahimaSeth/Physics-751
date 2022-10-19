@@ -20,7 +20,7 @@ rc('animation', html='html5')
 mu = 0.5        #choose a mu value
 
 #loading the .npy file containing the mu value and associated values of the Lagrange points
-data = np.load(r"C:\Users\mahim\Desktop\Physics 751\python files\slider_input.npy")
+data = np.load(r"C:\Users\mahim\Desktop\Physics 751\python files\L2 positions.npy")
 
 
 #extract the position of the L2 point for the chosen value of mu
